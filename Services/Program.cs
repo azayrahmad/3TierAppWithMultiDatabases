@@ -4,8 +4,9 @@ using Data.Models.TransactionDb;
 using Data.Models.UserDb;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Services;
+using Services.DTOs;
 using Services.Repositories;
+using Services.Services;
 using Services.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -106,11 +107,11 @@ app.MapGet("/products/{id}", async (int id, ProductService productService) => aw
     .WithName("GetProductById")
     .WithOpenApi();
 
-app.MapPost("/products", async (Product product, ProductService productService) => { await productService.AddProductAsync(product); return Results.Ok(); })
+app.MapPost("/products", async (ProductDto productDto, ProductService productService) => { await productService.AddProductAsync(productDto); return Results.Ok(); })
     .WithName("AddProduct")
-    .WithOpenApi();
+.WithOpenApi();
 
-app.MapPut("/products/{id}", async (int id, Product product, ProductService productService) => { await productService.UpdateProductAsync(product); return Results.Ok(); })
+app.MapPut("/products/{id}", async (int id, ProductDto productDto, ProductService productService) => { await productService.UpdateProductAsync(productDto); return Results.Ok(); })
     .WithName("UpdateProduct")
     .WithOpenApi();
 

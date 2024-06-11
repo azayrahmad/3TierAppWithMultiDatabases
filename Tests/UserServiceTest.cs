@@ -1,7 +1,7 @@
 using Data.Models.UserDb;
 using Moq;
-using Services;
 using Services.Repositories;
+using Services.Services;
 using Services.UnitOfWork;
 
 namespace Tests

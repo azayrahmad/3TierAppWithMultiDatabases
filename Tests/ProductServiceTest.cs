@@ -1,24 +1,26 @@
 using Data.Models.ProductDb;
+using Services.DTOs;
 using Moq;
 using Services;
-using Services.Repositories;
 using Services.UnitOfWork;
+using Data.Contexts;
+using Castle.Components.DictionaryAdapter.Xml;
+using Services.Services;
 
 namespace Tests
 {
     public class ProductServiceTests
     {
-        private Mock<IRepository<Product>> _productRepositoryMock;
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private ProductService _productService;
+        private Mock<ProductDbContext> _productDbContextMock;
 
         [SetUp]
         public void Setup()
         {
-            _productRepositoryMock = new Mock<IRepository<Product>>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
         
-            _unitOfWorkMock.Setup(u => u.Products).Returns(_productRepositoryMock.Object);
+            _unitOfWorkMock.Setup(u => u.Products).Returns(_unitOfWorkMock.Object.Products);
             _productService = new ProductService(_unitOfWorkMock.Object);
         }
 
@@ -27,7 +29,7 @@ namespace Tests
         {
             // Arrange
             var products = new List<Product> { new Product { Id = 1, Name = "Product1", Price = 10 } };
-            _productRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(products);
+            _unitOfWorkMock.Setup(repo => repo.Products.GetAllAsync()).ReturnsAsync(products);
 
             // Act
             var result = await _productService.GetAllProductsAsync();
@@ -42,52 +44,58 @@ namespace Tests
         {
             // Arrange
             var product = new Product { Id = 1, Name = "Product1", Price = 10 };
-            _productRepositoryMock.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(product);
+            _unitOfWorkMock.Setup(repo => repo.Products.GetByIdAsync(1)).ReturnsAsync(product);
 
             // Act
             var result = await _productService.GetProductByIdAsync(1);
 
             // Assert
-            Assert.That(result, Is.EqualTo(product));
+            Assert.That(result, Is.EqualTo(product.ToDto()));
         }
 
         [Test]
         public async Task AddProductAsync_AddsProduct()
         {
             // Arrange
-            var product = new Product { Id = 1, Name = "Product1", Price = 10 };
+            var productDto = new ProductDto { Id = 1, Name = "Product1", Price = 10 };
 
             // Act
-            await _productService.AddProductAsync(product);
+            await _productService.AddProductAsync(productDto);
 
             // Assert
-            _productRepositoryMock.Verify(repo => repo.AddAsync(product), Times.Once);
+            _unitOfWorkMock.Verify(repo => repo.Products.AddAsync(productDto.ToEntity()), Times.Once);
         }
 
         [Test]
         public async Task UpdateProductAsync_UpdatesProduct()
         {
             // Arrange
-            var product = new Product { Id = 1, Name = "Product1", Price = 10 };
+            var productDto = new ProductDto { Id = 1, Name = "Product1", Price = 10 };
 
             // Act
-            await _productService.UpdateProductAsync(product);
+            await _productService.UpdateProductAsync(productDto);
 
             // Assert
-            _productRepositoryMock.Verify(repo => repo.UpdateAsync(product), Times.Once);
+            _unitOfWorkMock.Verify(repo => repo.Products.UpdateAsync(productDto.ToEntity()), Times.Once);
         }
 
         [Test]
         public async Task DeleteProductAsync_DeletesProduct()
         {
             // Arrange
-            const int productId = 1;
+            var product = new Product { Id = 1, Name = "Product1", Price = 10 };
+
+            _unitOfWorkMock.Setup(uow => uow.Products.GetByIdAsync(product.Id)).ReturnsAsync(product);
+            _unitOfWorkMock.Setup(uow => uow.Products.DeleteAsync(product.Id)).Returns(Task.CompletedTask);
+            _unitOfWorkMock.Setup(uow => uow.CompleteAsync()).Returns(Task.CompletedTask);
 
             // Act
-            await _productService.DeleteProductAsync(productId);
+            await _productService.DeleteProductAsync(product.Id);
 
             // Assert
-            _productRepositoryMock.Verify(repo => repo.DeleteAsync(productId), Times.Once);
+            _unitOfWorkMock.Verify(uow => uow.Products.GetByIdAsync(product.Id), Times.Once);
+            _unitOfWorkMock.Verify(uow => uow.Products.DeleteAsync(product.Id), Times.Once);
+            _unitOfWorkMock.Verify(uow => uow.CompleteAsync(), Times.Once);
         }
     }
 }

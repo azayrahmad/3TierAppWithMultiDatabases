@@ -1,7 +1,8 @@
 using Data.Models.ProductDb;
+using Services.DTOs;
 using Services.UnitOfWork;
 
-namespace Services
+namespace Services.Services
 {
     public class ProductService
     {
@@ -12,25 +13,27 @@ namespace Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
         {
-            return await _unitOfWork.Products.GetAllAsync();
+            var products = await _unitOfWork.Products.GetAllAsync();
+            return products.Select(p => p.ToDto());
         }
 
-        public async Task<Product> GetProductByIdAsync(int id)
+        public async Task<ProductDto> GetProductByIdAsync(int id)
         {
-            return await _unitOfWork.Products.GetByIdAsync(id);
+            var product = await _unitOfWork.Products.GetByIdAsync(id);
+            return product.ToDto();
         }
 
-        public async Task AddProductAsync(Product product)
+        public async Task AddProductAsync(ProductDto productDto)
         {
-            await _unitOfWork.Products.AddAsync(product);
+            await _unitOfWork.Products.AddAsync(productDto.ToEntity());
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task UpdateProductAsync(Product product)
+        public async Task UpdateProductAsync(ProductDto productDto)
         {
-            await _unitOfWork.Products.UpdateAsync(product);
+            await _unitOfWork.Products.UpdateAsync(productDto.ToEntity());
             await _unitOfWork.CompleteAsync();
         }
 

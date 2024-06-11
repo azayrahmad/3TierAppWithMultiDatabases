@@ -1,7 +1,7 @@
 using Data.Models.TransactionDb;
 using Services.UnitOfWork;
 
-namespace Services
+namespace Services.Services
 {
     public class TransactionService
     {
