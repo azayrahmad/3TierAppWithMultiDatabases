@@ -3,10 +3,7 @@ using Services.DTOs;
 using Moq;
 using Services;
 using Services.UnitOfWork;
-using Data.Contexts;
-using Castle.Components.DictionaryAdapter.Xml;
 using Services.Services;
-using Data.Models.UserDb;
 
 namespace Tests
 {
@@ -14,7 +11,6 @@ namespace Tests
     {
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private ProductService _productService;
-        private Mock<ProductDbContext> _productDbContextMock;
 
         [SetUp]
         public void Setup()
@@ -80,7 +76,6 @@ namespace Tests
             updatedProductDto.Name = "Prduct1 Updated";
             updatedProductDto.Price = 20;
             _unitOfWorkMock.Setup(uow => uow.Products.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(product);
-
 
             // Act
             await _productService.UpdateProductAsync(updatedProductDto);
