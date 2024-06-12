@@ -10,18 +10,13 @@ namespace Tests
 {
     public class UserServiceTests
     {
-        private Mock<IRepository<User>> _userRepositoryMock;
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private UserService _userService;
 
         [SetUp]
         public void SetUp()
         {
-            _userRepositoryMock = new Mock<IRepository<User>>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            
-            _unitOfWorkMock.Setup(u => u.Users).Returns(_userRepositoryMock.Object);
-
             _userService = new UserService(_unitOfWorkMock.Object);
         }
         [Test]
@@ -29,13 +24,14 @@ namespace Tests
         {
             // Arrange
             var users = new List<User> { new User { Id = 1, Name = "John" } };
-            _userRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(users);
+            _unitOfWorkMock.Setup(uow => uow.Users.GetAllAsync()).ReturnsAsync(users);
 
             // Act
             var result = await _userService.GetAllUsersAsync();
 
             // Assert
             Assert.That(result.Count(), Is.EqualTo(1));
+            Assert.That(result.First().Name, Is.EqualTo(users.First().Name));
         }
 
         // Additional tests
@@ -44,7 +40,7 @@ namespace Tests
         {
             // Arrange
             var user = new User { Id = 1, Name = "John" };
-            _userRepositoryMock.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(user);
+            _unitOfWorkMock.Setup(repo => repo.Users.GetByIdAsync(1)).ReturnsAsync(user);
 
             // Act
             var result = await _userService.GetUserByIdAsync(1);
@@ -58,13 +54,15 @@ namespace Tests
         public async Task AddUserAsync_AddsUser()
         {
             // Arrange
-            var user = new UserDto { Id = 1, Name = "John" };
+            var user = new UserDto { Id = 1, Name = "John", Email = "john@test.com" };
+            _unitOfWorkMock.Setup(uow => uow.Users.GetByIdAsync(It.Is<int>(id => id == user.Id))).ReturnsAsync(user.ToEntity());
 
             // Act
             await _userService.AddUserAsync(user);
 
             // Assert
-            _userRepositoryMock.Verify(repo => repo.AddAsync(user.ToEntity()), Times.Once);
+            _unitOfWorkMock.Verify(repo => repo.Users.AddAsync(It.Is<User>(u => u.Id == user.Id)), Times.Once);
+            _unitOfWorkMock.Verify(uow => uow.CompleteAsync(), Times.Once);
         }
 
         [Test]
@@ -72,12 +70,17 @@ namespace Tests
         {
             // Arrange
             var user = new User { Id = 1, Name = "John" };
+            var updatedUserDto = user.ToDto();
+            updatedUserDto.Name = "Jane";
+            _unitOfWorkMock.Setup(uow => uow.Users.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(user);
+
 
             // Act
-            await _userService.UpdateUserAsync(user.ToDto());
+            await _userService.UpdateUserAsync(updatedUserDto);
 
             // Assert
-            _userRepositoryMock.Verify(repo => repo.UpdateAsync(user), Times.Once);
+            _unitOfWorkMock.Verify(repo => repo.Users.UpdateAsync(It.Is<User>(u => u.Id == user.Id && u.Name == updatedUserDto.Name)), Times.Once);
+            _unitOfWorkMock.Verify(uow => uow.CompleteAsync(), Times.Once);
         }
 
         [Test]
@@ -85,12 +88,16 @@ namespace Tests
         {
             // Arrange
             const int userId = 1;
+            _unitOfWorkMock.Setup(uow => uow.Users.DeleteAsync(It.IsAny<int>())).Verifiable();
 
             // Act
             await _userService.DeleteUserAsync(userId);
 
             // Assert
-            _userRepositoryMock.Verify(repo => repo.DeleteAsync(userId), Times.Once);
+            _unitOfWorkMock.Verify(repo => repo.Users.DeleteAsync(userId), Times.Once);
+            _unitOfWorkMock.Verify(uow => uow.CompleteAsync(), Times.Once);
+
+
         }
     }
 }

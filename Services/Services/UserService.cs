@@ -24,9 +24,9 @@ namespace Services.Services
             return user.ToDto();
         }
 
-        public async Task AddUserAsync(UserDto user)
+        public async Task AddUserAsync(UserDto userDto)
         {
-            await _unitOfWork.Users.AddAsync(user.ToEntity());
+            await _unitOfWork.Users.AddAsync(userDto.ToEntity());
             await _unitOfWork.CompleteAsync();
         }
 
