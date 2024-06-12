@@ -1,4 +1,4 @@
-using Data.Models.UserDb;
+using Services.DTOs;
 using Services.UnitOfWork;
 
 namespace Services.Services
@@ -12,25 +12,27 @@ namespace Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
-            return _unitOfWork.Users.GetAllAsync();
+            var users = await _unitOfWork.Users.GetAllAsync();
+            return users.Select(p => p.ToDto()); ;
         }
 
-        public Task<User> GetUserByIdAsync(int id)
+        public async Task<UserDto> GetUserByIdAsync(int id)
         {
-            return _unitOfWork.Users.GetByIdAsync(id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
+            return user.ToDto();
         }
 
-        public async Task AddUserAsync(User user)
+        public async Task AddUserAsync(UserDto user)
         {
-            await _unitOfWork.Users.AddAsync(user);
+            await _unitOfWork.Users.AddAsync(user.ToEntity());
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task UpdateUserAsync(User user)
+        public async Task UpdateUserAsync(UserDto user)
         {
-            await _unitOfWork.Users.UpdateAsync(user);
+            await _unitOfWork.Users.UpdateAsync(user.ToEntity());
             await _unitOfWork.CompleteAsync();
         }
 

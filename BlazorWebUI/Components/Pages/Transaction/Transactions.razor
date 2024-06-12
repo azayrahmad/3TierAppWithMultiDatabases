@@ -1,8 +1,5 @@
 @page "/transactions"
-@using Data.Models;
-@using Data.Models.ProductDb
-@using Data.Models.UserDb
-@using Data.Models.TransactionDb
+@using Services.DTOs
 @inject IConfiguration Config
 @inject HttpClient Http
 @inject NavigationManager Navigation
@@ -11,7 +8,7 @@
 
 <button class="btn btn-primary" @onclick="CreateNewTransaction">Add Transaction</button>
 
-@if (transactions == null || users == null || products == null)
+@if (transactions == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -31,12 +28,10 @@ else
         <tbody>
             @foreach (var transaction in transactions)
             {
-                var user = users.FirstOrDefault(u => u.Id == transaction.UserId);
-                var product = products.FirstOrDefault(p => p.Id == transaction.ProductId);
                 <tr>
                     <td>@transaction.Id</td>
-                    <td>@user?.Name</td>
-                    <td>@product?.Name</td>
+                    <td>@transaction.UserName</td>
+                    <td>@transaction.ProductName</td>
                     <td>@transaction.Status</td>
                     <td>@transaction.TransactionDate.ToShortDateString()</td>
                     <td>
@@ -50,9 +45,7 @@ else
 }
 
 @code {
-    private List<Transaction>? transactions;
-    private List<User>? users;
-    private List<Product>? products;
+    private List<TransactionDto>? transactions;
     private string? serviceEndpoint;
 
     protected override async Task OnInitializedAsync()
@@ -63,9 +56,7 @@ else
 
     private async Task LoadData()
     {
-        transactions = await Http.GetFromJsonAsync<List<Transaction>>(serviceEndpoint);
-        users = await Http.GetFromJsonAsync<List<User>>($"{Config.GetValue<string>("BackendUrl")}/users");
-        products = await Http.GetFromJsonAsync<List<Product>>($"{Config.GetValue<string>("BackendUrl")}/products");
+        transactions = await Http.GetFromJsonAsync<List<TransactionDto>>(serviceEndpoint);
     }
 
     private void CreateNewTransaction()

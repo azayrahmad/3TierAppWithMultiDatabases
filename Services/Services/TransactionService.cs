@@ -1,4 +1,4 @@
-using Data.Models.TransactionDb;
+using Services.DTOs;
 using Services.UnitOfWork;
 
 namespace Services.Services
@@ -12,49 +12,62 @@ namespace Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Transaction>> GetAllTransactionsAsync()
+        public async Task<IEnumerable<TransactionDto>> GetAllTransactionsAsync()
         {
-            return await _unitOfWork.Transactions.GetAllAsync();
+            var transactions = await _unitOfWork.Transactions.GetAllAsync();
+            var users = await _unitOfWork.Users.GetAllAsync();
+            var products = await _unitOfWork.Products.GetAllAsync();
+
+            return transactions.Select(t =>
+            {
+                var user = users.FirstOrDefault(u => u.Id == t.UserId);
+                var product = products.FirstOrDefault(p => p.Id == t.ProductId);
+                return t.ToDto(user, product);
+            });
         }
 
-        public async Task<Transaction> GetTransactionByIdAsync(int id)
+        public async Task<TransactionDto> GetTransactionByIdAsync(int id)
         {
-            return await _unitOfWork.Transactions.GetByIdAsync(id);
-        }
+            var transaction = await _unitOfWork.Transactions.GetByIdAsync(id);
+            if (transaction == null) return null;
 
-        public async Task AddTransactionAsync(Transaction transaction)
-        {
             var user = await _unitOfWork.Users.GetByIdAsync(transaction.UserId);
             var product = await _unitOfWork.Products.GetByIdAsync(transaction.ProductId);
 
-            if (user != null && product != null)
-            {
-                await _unitOfWork.Transactions.AddAsync(transaction);
-                await _unitOfWork.CompleteAsync();
-            }
-            else
+            return transaction.ToDto(user, product);
+        }
+
+        public async Task AddTransactionAsync(TransactionDto transactionDto)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(transactionDto.UserId);
+            var product = await _unitOfWork.Products.GetByIdAsync(transactionDto.ProductId);
+
+            if (user == null || product == null)
             {
                 throw new Exception("User or Product does not exist.");
             }
+
+            var transaction = transactionDto.ToEntity();
+
+            await _unitOfWork.Transactions.AddAsync(transaction);
+            await _unitOfWork.CompleteAsync();
         }
 
-        public async Task UpdateTransactionAsync(Transaction transaction)
+        public async Task UpdateTransactionAsync(TransactionDto transactionDto)
         {
-            var existingTransaction = await _unitOfWork.Transactions.GetByIdAsync(transaction.Id);
-            if (existingTransaction != null)
+            var transaction = await _unitOfWork.Transactions.GetByIdAsync(transactionDto.Id);
+            if (transaction == null)
             {
-                existingTransaction.UserId = transaction.UserId;
-                existingTransaction.ProductId = transaction.ProductId;
-                existingTransaction.Status = transaction.Status;
-                existingTransaction.TransactionDate = transaction.TransactionDate;
+                throw new Exception("Transaction does not exist.");
+            }
 
-                await _unitOfWork.Transactions.UpdateAsync(existingTransaction);
-                await _unitOfWork.CompleteAsync();
-            }
-            else
-            {
-                throw new Exception("Transaction does not exist");
-            }
+            transaction.UserId = transactionDto.UserId;
+            transaction.ProductId = transactionDto.ProductId;
+            transaction.TransactionDate = transactionDto.TransactionDate;
+            transaction.Status = transactionDto.Status;
+
+            await _unitOfWork.Transactions.UpdateAsync(transaction);
+            await _unitOfWork.CompleteAsync();
         }
 
         public async Task DeleteTransactionAsync(int id)

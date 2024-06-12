@@ -87,11 +87,11 @@ app.MapGet("/users/{id}", async (int id, UserService userService) => await userS
     .WithName("GetUserById")
     .WithOpenApi();
 
-app.MapPost("/users", async (User user, UserService userService) => { await userService.AddUserAsync(user); return Results.Ok(); })
+app.MapPost("/users", async (UserDto userDto, UserService userService) => { await userService.AddUserAsync(userDto); return Results.Ok(); })
     .WithName("AddUser")
     .WithOpenApi();
 
-app.MapPut("/users/{id}", async (int id, User user, UserService userService) => { await userService.UpdateUserAsync(user); return Results.Ok(); })
+app.MapPut("/users/{id}", async (int id, UserDto userDto, UserService userService) => { await userService.UpdateUserAsync(userDto); return Results.Ok(); })
     .WithName("UpdateUser")
     .WithOpenApi();
 
@@ -127,11 +127,11 @@ app.MapGet("/transactions/{id}", async (int id, TransactionService transactionSe
     .WithName("GetTransactionById")
     .WithOpenApi();
 
-app.MapPost("/transactions", async (Transaction transaction, TransactionService transactionService) => { await transactionService.AddTransactionAsync(transaction); return Results.Ok(); })
+app.MapPost("/transactions", async (TransactionDto transaction, TransactionService transactionService) => { await transactionService.AddTransactionAsync(transaction); return Results.Ok(); })
     .WithName("AddTransaction")
     .WithOpenApi();
 
-app.MapPut("/transactions/{id}", async (int id, Transaction transaction, TransactionService transactionService) => { await transactionService.UpdateTransactionAsync(transaction); return Results.Ok(); })
+app.MapPut("/transactions/{id}", async (int id, TransactionDto transaction, TransactionService transactionService) => { await transactionService.UpdateTransactionAsync(transaction); return Results.Ok(); })
     .WithName("UpdateTransaction")
     .WithOpenApi();
 

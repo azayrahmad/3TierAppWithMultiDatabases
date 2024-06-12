@@ -1,4 +1,3 @@
-using Data.Models.ProductDb;
 using Services.DTOs;
 using Services.UnitOfWork;
 

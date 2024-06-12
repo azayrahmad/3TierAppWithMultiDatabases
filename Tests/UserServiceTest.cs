@@ -1,8 +1,10 @@
 using Data.Models.UserDb;
+using Services.DTOs;
 using Moq;
 using Services.Repositories;
 using Services.Services;
 using Services.UnitOfWork;
+using Services;
 
 namespace Tests
 {
@@ -48,20 +50,21 @@ namespace Tests
             var result = await _userService.GetUserByIdAsync(1);
 
             // Assert
-            Assert.That(result, Is.EqualTo(user));
+            Assert.That(result.Id, Is.EqualTo(user.Id));
+            Assert.That(result.Name, Is.EqualTo(user.Name));
         }
 
         [Test]
         public async Task AddUserAsync_AddsUser()
         {
             // Arrange
-            var user = new User { Id = 1, Name = "John" };
+            var user = new UserDto { Id = 1, Name = "John" };
 
             // Act
             await _userService.AddUserAsync(user);
 
             // Assert
-            _userRepositoryMock.Verify(repo => repo.AddAsync(user), Times.Once);
+            _userRepositoryMock.Verify(repo => repo.AddAsync(user.ToEntity()), Times.Once);
         }
 
         [Test]
@@ -71,7 +74,7 @@ namespace Tests
             var user = new User { Id = 1, Name = "John" };
 
             // Act
-            await _userService.UpdateUserAsync(user);
+            await _userService.UpdateUserAsync(user.ToDto());
 
             // Assert
             _userRepositoryMock.Verify(repo => repo.UpdateAsync(user), Times.Once);

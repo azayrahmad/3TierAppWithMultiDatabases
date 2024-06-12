@@ -1,8 +1,5 @@
 @page "/edit-transaction/{id:int}"
-@using Data.Models;
-@using Data.Models.ProductDb
-@using Data.Models.TransactionDb
-@using Data.Models.UserDb
+@using Services.DTOs
 @inject HttpClient Http
 @inject IConfiguration Config
 @inject NavigationManager Navigation
@@ -62,11 +59,11 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private Transaction? transaction;
+    private TransactionDto? transaction;
     private bool isNewTransaction;
     private string? serviceEndpoint;
-    private List<User>? users;
-    private List<Product>? products;
+    private List<UserDto>? users;
+    private List<ProductDto>? products;
 
     protected override async Task OnInitializedAsync()
     {
@@ -74,11 +71,11 @@ else
         isNewTransaction = Id == 0;
         if (isNewTransaction)
         {
-            transaction = new Transaction() { UserId = 0, ProductId = 0, Status = "New" };
+            transaction = new TransactionDto() { UserId = 0, ProductId = 0, Status = "New" };
         }
         else
         {
-            transaction = await Http.GetFromJsonAsync<Transaction>($"{serviceEndpoint}/{Id}");
+            transaction = await Http.GetFromJsonAsync<TransactionDto>($"{serviceEndpoint}/{Id}");
         }
 
         await LoadUsersAndProducts();
@@ -86,8 +83,8 @@ else
 
     private async Task LoadUsersAndProducts()
     {
-        users = await Http.GetFromJsonAsync<List<User>>($"{Config.GetValue<string>("BackendUrl")}/users");
-        products = await Http.GetFromJsonAsync<List<Product>>($"{Config.GetValue<string>("BackendUrl")}/products");
+        users = await Http.GetFromJsonAsync<List<UserDto>>($"{Config.GetValue<string>("BackendUrl")}/users");
+        products = await Http.GetFromJsonAsync<List<ProductDto>>($"{Config.GetValue<string>("BackendUrl")}/products");
     }
 
     private async Task HandleValidSubmit()

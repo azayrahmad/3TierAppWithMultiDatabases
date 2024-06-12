@@ -1,6 +1,5 @@
 @page "/edit-user/{id:int}"
-@using Data.Models;
-@using Data.Models.UserDb
+@using Services.DTOs
 @inject HttpClient Http
 @inject IConfiguration Config
 @inject NavigationManager Navigation
@@ -38,7 +37,7 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    private User? user;
+    private UserDto? user;
     private bool isNewUser;
     private string? serviceEndpoint;
 
@@ -48,11 +47,11 @@ else
         isNewUser = Id == 0;
         if (isNewUser)
         {
-            user = new User();
+            user = new UserDto();
         }
         else
         {
-            user = await Http.GetFromJsonAsync<User>($"{serviceEndpoint}/{Id}");
+            user = await Http.GetFromJsonAsync<UserDto>($"{serviceEndpoint}/{Id}");
         }
     }
 
