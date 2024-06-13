@@ -109,7 +109,7 @@ app.MapGet("/products/{id}", async (int id, ProductService productService) => aw
 
 app.MapPost("/products", async (ProductDto productDto, ProductService productService) => { await productService.AddProductAsync(productDto); return Results.Ok(); })
     .WithName("AddProduct")
-.WithOpenApi();
+    .WithOpenApi();
 
 app.MapPut("/products/{id}", async (int id, ProductDto productDto, ProductService productService) => { await productService.UpdateProductAsync(productDto); return Results.Ok(); })
     .WithName("UpdateProduct")

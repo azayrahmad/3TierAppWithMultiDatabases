@@ -17,14 +17,14 @@ namespace Services.UnitOfWork
             _userDbContext = userDbContext;
             _productDbContext = productDbContext;
             _transactionDbContext = transactionDbContext;
-            Users = new GenericRepository<User, UserDbContext>(_userDbContext);
-            Products = new GenericRepository<Product, ProductDbContext>(_productDbContext);
-            Transactions = new GenericRepository<Transaction, TransactionDbContext>(_transactionDbContext);
+            Users = new UserRepository(_userDbContext);
+            Products = new ProductRepository(_productDbContext);
+            Transactions = new TransactionRepository(_transactionDbContext);
         }
 
-        public IRepository<User> Users  { get; private set; }
-        public IRepository<Product> Products  { get; private set; }
-        public IRepository<Transaction> Transactions  { get; private set; }
+        public IUserRepository Users  { get; private set; }
+        public IProductRepository Products  { get; private set; }
+        public ITransactionRepository Transactions  { get; private set; }
 
         public async Task CompleteAsync()
         {

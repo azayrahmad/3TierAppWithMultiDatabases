@@ -10,9 +10,9 @@ namespace Services.UnitOfWork
     /// </summary>
     public interface IUnitOfWork
     {
-        IRepository<User> Users { get; }
-        IRepository<Product> Products { get; }
-        IRepository<Transaction> Transactions { get; }
+        IUserRepository Users { get; }
+        IProductRepository Products { get; }
+        ITransactionRepository Transactions { get; }
         Task CompleteAsync();
     }
 }
