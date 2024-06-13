@@ -33,6 +33,11 @@ namespace Services.UnitOfWork
             await _transactionDbContext.SaveChangesAsync();
         }
 
-
+        public void Dispose()
+        {
+            _userDbContext.Dispose();
+            _productDbContext.Dispose();
+            _transactionDbContext.Dispose();
+        }
     }
 }
