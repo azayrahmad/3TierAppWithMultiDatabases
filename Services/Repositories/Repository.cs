@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using Services.Repositories.Interfaces;
 
 namespace Services.Repositories
 {
-    public class GenericRepository<T, TContext> : IRepository<T> where T : class where TContext : DbContext
+    public class Repository<T, TContext> : IRepository<T> where T : class where TContext : DbContext
     {
         private readonly TContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(TContext context)
+        public Repository(TContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();

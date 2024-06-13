@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Services.DTOs;
 using Services.Repositories;
+using Services.Repositories.Interfaces;
 using Services.Services;
 using Services.UnitOfWork;
 
@@ -16,9 +17,9 @@ builder.Services.AddDbContext<UserDbContext>();
 builder.Services.AddDbContext<ProductDbContext>();
 builder.Services.AddDbContext<TransactionDbContext>();
 
-builder.Services.AddScoped<IRepository<User>, GenericRepository<User, UserDbContext>>();
-builder.Services.AddScoped<IRepository<Product>, GenericRepository<Product, ProductDbContext>>();
-builder.Services.AddScoped<IRepository<Transaction>, GenericRepository<Transaction, TransactionDbContext>>();
+builder.Services.AddScoped<IRepository<User>, Repository<User, UserDbContext>>();
+builder.Services.AddScoped<IRepository<Product>, Repository<Product, ProductDbContext>>();
+builder.Services.AddScoped<IRepository<Transaction>, Repository<Transaction, TransactionDbContext>>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProductService>();

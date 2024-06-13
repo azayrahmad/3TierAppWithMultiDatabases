@@ -1,4 +1,4 @@
-namespace Services.Repositories
+namespace Services.Repositories.Interfaces
 {
     public interface IRepository<T>
     {

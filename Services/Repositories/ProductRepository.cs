@@ -1,10 +1,11 @@
 ﻿using Data.Contexts;
 using Data.Models.ProductDb;
+using Services.Repositories.Interfaces;
 
 namespace Services.Repositories
 {
     public class ProductRepository(ProductDbContext context) : 
-        GenericRepository<Product, ProductDbContext>(context), IProductRepository
+        Repository<Product, ProductDbContext>(context), IProductRepository
     {
     }
 }

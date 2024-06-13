@@ -3,6 +3,7 @@ using Data.Models.ProductDb;
 using Data.Models.TransactionDb;
 using Data.Models.UserDb;
 using Services.Repositories;
+using Services.Repositories.Interfaces;
 
 namespace Services.UnitOfWork
 {

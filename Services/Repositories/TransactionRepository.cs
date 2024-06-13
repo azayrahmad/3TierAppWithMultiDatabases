@@ -1,11 +1,12 @@
 ﻿using Data.Contexts;
 using Data.Models.TransactionDb;
 using Microsoft.EntityFrameworkCore;
+using Services.Repositories.Interfaces;
 
 namespace Services.Repositories
 {
     public class TransactionRepository(TransactionDbContext context) : 
-        GenericRepository<Transaction, TransactionDbContext>(context), ITransactionRepository
+        Repository<Transaction, TransactionDbContext>(context), ITransactionRepository
     {
         private readonly DbSet<Transaction> _dbSet = context.Set<Transaction>();
         public async Task<IEnumerable<Transaction>> GetAllByProductIdAsync(int productId)

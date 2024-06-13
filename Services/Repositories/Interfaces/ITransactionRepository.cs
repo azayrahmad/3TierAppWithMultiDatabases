@@ -1,6 +1,6 @@
 ﻿using Data.Models.TransactionDb;
 
-namespace Services.Repositories
+namespace Services.Repositories.Interfaces
 {
     public interface ITransactionRepository : IRepository<Transaction>
     {

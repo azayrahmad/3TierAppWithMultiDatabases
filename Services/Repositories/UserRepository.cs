@@ -1,10 +1,11 @@
 ﻿using Data.Contexts;
 using Data.Models.UserDb;
+using Services.Repositories.Interfaces;
 
 namespace Services.Repositories
 {
     public class UserRepository(UserDbContext context) : 
-        GenericRepository<User, UserDbContext>(context), IUserRepository
+        Repository<User, UserDbContext>(context), IUserRepository
     {
     }
 }
