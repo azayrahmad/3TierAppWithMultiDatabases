@@ -31,6 +31,35 @@ else
         <button type="submit" class="btn btn-primary">Save</button>
         <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
     </EditForm>
+
+    @if (product.Transactions == null)
+    {
+        <p><em>No transaction found...</em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Status</th>
+                    <th>Transaction Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transaction in product.Transactions)
+                {
+                    <tr>
+                        <td>@transaction.Id</td>
+                        <td>@transaction.UserName</td>
+                        <td>@transaction.Status</td>
+                        <td>@transaction.TransactionDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 }
 
 @code {

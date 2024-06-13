@@ -84,7 +84,7 @@ app.MapGet("/users", async (UserService userService) => await userService.GetAll
     .WithName("GetAllUsers")
     .WithOpenApi();
 
-app.MapGet("/users/{id}", async (int id, UserService userService) => await userService.GetUserByIdAsync(id))
+app.MapGet("/users/{id}", async (int id, UserService userService) => await userService.GetUserByIdWithTransactionsAsync(id))
     .WithName("GetUserById")
     .WithOpenApi();
 
@@ -104,7 +104,7 @@ app.MapGet("/products", async (ProductService productService) => await productSe
     .WithName("GetAllProducts")
     .WithOpenApi();
 
-app.MapGet("/products/{id}", async (int id, ProductService productService) => await productService.GetProductByIdAsync(id))
+app.MapGet("/products/{id}", async (int id, ProductService productService) => await productService.GetProductByIdWithTransactionsAsync(id))
     .WithName("GetProductById")
     .WithOpenApi();
 

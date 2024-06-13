@@ -23,6 +23,21 @@ namespace Services.Services
             var user = await _unitOfWork.Users.GetByIdAsync(id);
             return user.ToDto();
         }
+        public async Task<UserDto> GetUserByIdWithTransactionsAsync(int id)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
+            var transactions = await _unitOfWork.Transactions.GetAllByUserIdAsync(id);
+            var products = await _unitOfWork.Products.GetAllAsync();
+            var transactionDtos = transactions.Select(t =>
+            {
+                var product = products.FirstOrDefault(p => p.Id == t.ProductId);
+                return t.ToDto(user, product);
+            });
+
+            var userDto = user.ToDto();
+            userDto.Transactions = transactionDtos;
+            return userDto;
+        }
 
         public async Task AddUserAsync(UserDto userDto)
         {
