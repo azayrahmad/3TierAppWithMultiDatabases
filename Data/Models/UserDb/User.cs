@@ -5,10 +5,8 @@ namespace Data.Models.UserDb
     /// <summary>
     /// Store the user data
     /// </summary>
-    public class User
+    public class User : BaseEntity
     {
-        public int Id { get; set; }
-
         [Required]
         [StringLength(100, MinimumLength = 2)]
         public string? Name { get; set; }

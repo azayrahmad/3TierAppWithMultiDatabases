@@ -19,6 +19,7 @@ else
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Category</th>
                 <th>Price</th>
                 <th>Actions</th>
             </tr>
@@ -29,6 +30,7 @@ else
                 <tr>
                     <td>@product.Id</td>
                     <td>@product.Name</td>
+                    <td>@product.Category.Name</td>
                     <td>@product.Price</td>
                     <td>
                         <button class="btn btn-primary" @onclick="() => EditProduct(product.Id)">Edit</button>

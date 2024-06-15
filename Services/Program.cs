@@ -19,10 +19,12 @@ builder.Services.AddDbContext<TransactionDbContext>();
 
 builder.Services.AddScoped<IRepository<User>, Repository<User, UserDbContext>>();
 builder.Services.AddScoped<IRepository<Product>, Repository<Product, ProductDbContext>>();
+builder.Services.AddScoped<IRepository<Category>, Repository<Category, ProductDbContext>>();
 builder.Services.AddScoped<IRepository<Transaction>, Repository<Transaction, TransactionDbContext>>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<TransactionService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -118,6 +120,26 @@ app.MapPut("/products/{id}", async (int id, ProductDto productDto, ProductServic
 
 app.MapDelete("/products/{id}", async (int id, ProductService productService) => { await productService.DeleteProductAsync(id); return Results.Ok(); })
     .WithName("DeleteProduct")
+    .WithOpenApi();
+
+app.MapGet("/categories", async (CategoryService categoryService) => await categoryService.GetAllCategoriesAsync())
+    .WithName("GetAllCategories")
+    .WithOpenApi();
+
+app.MapGet("/categories/{id}", async (int id, CategoryService categoryService) => await categoryService.GetCategoryByIdAsync(id))
+    .WithName("GetCategoryById")
+    .WithOpenApi();
+
+app.MapPost("/categories", async (CategoryDto categoryDto, CategoryService categoryService) => { await categoryService.AddCategoryAsync(categoryDto); return Results.Ok(); })
+    .WithName("AddCategory")
+    .WithOpenApi();
+
+app.MapPut("/categories/{id}", async (int id, CategoryDto categoryDto, CategoryService categoryService) => { await categoryService.UpdateCategoryAsync(categoryDto); return Results.Ok(); })
+    .WithName("UpdateCategory")
+    .WithOpenApi();
+
+app.MapDelete("/categories/{id}", async (int id, CategoryService categoryService) => { await categoryService.DeleteCategoryAsync(id); return Results.Ok(); })
+    .WithName("DeleteCategory")
     .WithOpenApi();
 
 app.MapGet("/transactions", async (TransactionService transactionService) => await transactionService.GetAllTransactionsAsync())

@@ -20,11 +20,13 @@ namespace Services.UnitOfWork
             _transactionDbContext = transactionDbContext;
             Users = new UserRepository(_userDbContext);
             Products = new ProductRepository(_productDbContext);
+            Categories = new CategoryRepository(_productDbContext);
             Transactions = new TransactionRepository(_transactionDbContext);
         }
 
         public IUserRepository Users  { get; private set; }
         public IProductRepository Products  { get; private set; }
+        public ICategoryRepository Categories { get; private set; }
         public ITransactionRepository Transactions  { get; private set; }
 
         public async Task CompleteAsync()

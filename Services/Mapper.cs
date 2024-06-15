@@ -59,6 +59,8 @@ namespace Services
             {
                 Id = product.Id,
                 Name = product.Name,
+                CategoryId = product.CategoryId,
+                Category = product.Category, 
                 Price = product.Price
             };
         }
@@ -69,7 +71,29 @@ namespace Services
             {
                 Id = productDto.Id,
                 Name = productDto.Name,
+                CategoryId = productDto.CategoryId,
+                Category = productDto.Category,
                 Price = productDto.Price
+            };
+        }
+
+        public static CategoryDto ToDto(this Category category)
+        {
+            return new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Products = category.Products
+            };
+        }
+
+        public static Category ToEntity(this CategoryDto categoryDto)
+        {
+            return new Category
+            {
+                Id = categoryDto.Id,
+                Name = categoryDto.Name,
+                Products = categoryDto.Products
             };
         }
     }

@@ -6,7 +6,7 @@
 
 <h3>Edit Product</h3>
 
-@if (product == null)
+@if (product == null || categories == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -20,6 +20,17 @@ else
             <label for="name">Name</label>
             <InputText id="name" class="form-control" @bind-Value="product.Name" />
             <ValidationMessage For="@(() => product.Name)" />
+        </div>
+
+        <div class="form-group">
+            <label for="categoryId">Category</label>
+            <InputSelect id="categoryId" class="form-control" @bind-Value="product.CategoryId">
+                @foreach (var category in categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => product.CategoryId)" />
         </div>
 
         <div class="form-group">
@@ -67,6 +78,7 @@ else
     public int Id { get; set; }
 
     private ProductDto? product;
+    private List<CategoryDto>? categories;
     private bool isNewProduct;
     private string? serviceEndpoint;
 
@@ -82,6 +94,8 @@ else
         {
             product = await Http.GetFromJsonAsync<ProductDto>($"{serviceEndpoint}/{Id}");
         }
+        categories = await Http.GetFromJsonAsync<List<CategoryDto>>($"{Config.GetValue<string>("BackendUrl")}/categories");
+
     }
 
     private async Task HandleValidSubmit()

@@ -13,6 +13,7 @@ namespace Services.UnitOfWork
         IUserRepository Users { get; }
         IProductRepository Products { get; }
         ITransactionRepository Transactions { get; }
+        ICategoryRepository Categories { get; }
         Task CompleteAsync();
     }
 }
