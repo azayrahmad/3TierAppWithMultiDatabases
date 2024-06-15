@@ -37,7 +37,7 @@ namespace Services.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public virtual async Task DeleteAsync(int id)
         {
             var entity = await _dbSet.FindAsync(id);
             if (entity != null)

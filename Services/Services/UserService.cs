@@ -53,6 +53,8 @@ namespace Services.Services
 
         public async Task DeleteUserAsync(int id)
         {
+            var transactions = await _unitOfWork.Transactions.GetAllByUserIdAsync(id);
+            if (transactions.Any()) return;
             await _unitOfWork.Users.DeleteAsync(id);
             await _unitOfWork.CompleteAsync();
         }

@@ -17,7 +17,6 @@ namespace Services.Repositories
 
         public override async Task<Product?> GetByIdAsync(int id)
         {
-            // Your custom logic here
             return await context.Products
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(p => p.Id == id);
