@@ -4,4 +4,14 @@
 
 <h1>Hello there!</h1>
 
-Welcome to Three Tier App homepage.
+<p>This web app demonstrated how a web app can handle multiple data sources that contains related tables.</p>
+<p>In this web app, there are three separate databases used.</p>
+<ul>
+    <li>User Database, which contains User table. A user can have multiple transactions.</li>
+    <li>Product Database, which contains Product and Category tables. There can be multiple products with the same category.</li>
+    <li>Transaction Database, which contains Transaction table. Each transaction needs to have one user and one product. 
+        Deleting a user or a product will delete all the associated transactions.</li>
+</ul>
+<p>In the left side, you can see each table in action. Feel free to manipulate the data as you wish.</p>
+<p>Be careful though, I haven't implement any validation so you might end up inserting incorrect data. :).</p>
+<p>If you'd like to know more, visit the GitHub link on the top right. You can view the source code and the explanation on how it works under the hood.</p>
