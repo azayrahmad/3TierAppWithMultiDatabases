@@ -13,9 +13,9 @@ using Services.UnitOfWork;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddDbContext<UserDbContext>();
-builder.Services.AddDbContext<ProductDbContext>();
-builder.Services.AddDbContext<TransactionDbContext>();
+builder.Services.AddDbContext<UserDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("UserDb")));
+builder.Services.AddDbContext<ProductDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("ProductDb"))); ;
+builder.Services.AddDbContext<TransactionDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("TransactionDb")));
 
 builder.Services.AddScoped<IRepository<User>, Repository<User, UserDbContext>>();
 builder.Services.AddScoped<IRepository<Product>, Repository<Product, ProductDbContext>>();
