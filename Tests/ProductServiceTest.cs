@@ -4,6 +4,7 @@ using Moq;
 using Services;
 using Services.UnitOfWork;
 using Services.Services;
+using Data.Models.TransactionDb;
 
 namespace Tests
 {
@@ -89,6 +90,7 @@ namespace Tests
         {
             // Arrange
             var product = new Product { Id = 1, Name = "Product1", Price = 10 };
+            _unitOfWorkMock.Setup(uow => uow.Transactions.GetByIdAsync(product.Id)).ReturnsAsync((Transaction)null);
             _unitOfWorkMock.Setup(uow => uow.Products.DeleteAsync(It.IsAny<int>())).Verifiable();
 
             // Act

@@ -4,6 +4,7 @@ using Moq;
 using Services.Services;
 using Services.UnitOfWork;
 using Services;
+using Data.Models.TransactionDb;
 
 namespace Tests
 {
@@ -88,6 +89,7 @@ namespace Tests
             // Arrange
             const int userId = 1;
             _unitOfWorkMock.Setup(uow => uow.Users.DeleteAsync(It.IsAny<int>())).Verifiable();
+            _unitOfWorkMock.Setup(uow => uow.Transactions.GetByIdAsync(userId)).ReturnsAsync((Transaction)null);
 
             // Act
             await _userService.DeleteUserAsync(userId);
