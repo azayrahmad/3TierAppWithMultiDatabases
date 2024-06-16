@@ -4,6 +4,7 @@ using Data.Models.TransactionDb;
 using Data.Models.UserDb;
 using Services.Repositories;
 using Services.Repositories.Interfaces;
+using System.Transactions;
 
 namespace Services.UnitOfWork
 {
@@ -31,6 +32,7 @@ namespace Services.UnitOfWork
 
         public async Task CompleteAsync()
         {
+            using TransactionScope transactionScope = new();
             await _userDbContext.SaveChangesAsync();
             await _productDbContext.SaveChangesAsync();
             await _transactionDbContext.SaveChangesAsync();

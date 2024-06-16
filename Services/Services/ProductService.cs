@@ -54,7 +54,13 @@ namespace Services.Services
         public async Task DeleteProductAsync(int id)
         {
             var transactions = await _unitOfWork.Transactions.GetAllByProductIdAsync(id);
-            if (transactions.Any()) return;
+            if (transactions.Any())
+            {
+                foreach (var transaction in transactions)
+                {
+                    await _unitOfWork.Transactions.DeleteAsync(transaction.Id);
+                }
+            }
             await _unitOfWork.Products.DeleteAsync(id);
             await _unitOfWork.CompleteAsync();
         }
