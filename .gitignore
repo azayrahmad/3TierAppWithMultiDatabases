@@ -400,3 +400,5 @@ FodyWeavers.xsd
 Services/product.db
 Services/transaction.db
 Services/user.db
+*.db-shm
+*.db-wal
