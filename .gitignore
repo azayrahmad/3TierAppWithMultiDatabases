@@ -396,3 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/Data/Migrations
+Services/product.db
+Services/transaction.db
+Services/user.db
