@@ -1,7 +1,11 @@
-# Multi-Database .NET Web App implementation with Entity Framework Core
+# Multi-Database .NET Web App Implementation with Entity Framework Core
 
-## Purpose
+## Overview
 This project demonstrates the implementation of a .NET web application that interacts with multiple databases using Entity Framework Core. The primary goal is to showcase how a .NET application can manage relationships across different databases and provide a clean, maintainable code structure that adheres to best practices and the SOLID principles.
+
+You can view the web application here: [Live Demo](https://blazorwebui20240617152704.azurewebsites.net/).
+
+You can also explore the web API here: [Web API](https://services20240617150841.azurewebsites.net/)
 
 ## Problem
 In modern enterprise applications, it is not uncommon to have data spread across multiple databases. For instance, a company might store user data in one database, product information in another, and transactions in a third. Managing relationships and ensuring data integrity across these databases can be challenging, particularly when using an ORM like Entity Framework Core, which traditionally assumes a single database context.
@@ -20,7 +24,7 @@ This project provides a comprehensive solution to this problem by:
 
 ## Project Structure
 The project is divided into three main layers:
-1. **Entities (Data Layer)**:
+1. **Data (Data Layer)**:
    - Contains the data models and DbContext configurations.
    - Manages the database interactions using EF Core.
 
@@ -35,6 +39,7 @@ The project is divided into three main layers:
    - Handles form validation and user interactions.
 
 ## Getting Started
+You can debug the app locally to see how it all work.
 
 ### Prerequisites
 - .NET 8 SDK
@@ -43,8 +48,8 @@ The project is divided into three main layers:
 ### Installation
 1. **Clone the repository**:
    ```sh
-   git clone https://github.com/yourusername/multi-database-efcore-app.git
-   cd multi-database-efcore-app
+   git clone https://github.com/azayrahmad/3TierAppWithMultiDatabases.git
+   cd 3TierAppWithMultiDatabases
    ```
 
 2. **Configure the databases**:
@@ -58,5 +63,3 @@ The project is divided into three main layers:
 This project provides a robust solution for managing a .NET application with multiple databases using Entity Framework Core. By following the provided steps, you can deploy a scalable and maintainable web application that demonstrates best practices and effective use of modern technologies. 
 
 For any questions or contributions, please refer to the issues section of the repository.
-
-See the live demo here: [Live Demo](https://blazorwebui20240617152704.azurewebsites.net/)
