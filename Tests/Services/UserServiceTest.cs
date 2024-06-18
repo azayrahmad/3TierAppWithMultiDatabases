@@ -23,15 +23,18 @@ namespace Tests.Services.Services
         public async Task GetAllUsersAsync_ReturnsAllUsers()
         {
             // Arrange
-            var users = new List<User> { new User { Id = 1, Name = "John" } };
+            var users = new List<User> { new() { Id = 1, Name = "John" } };
             _unitOfWorkMock.Setup(uow => uow.Users.GetAllAsync()).ReturnsAsync(users);
 
             // Act
             var result = await _userService.GetAllUsersAsync();
 
-            // Assert
-            Assert.That(result.Count(), Is.EqualTo(1));
-            Assert.That(result.First().Name, Is.EqualTo(users.First().Name));
+            Assert.Multiple(() =>
+            {
+                // Assert
+                Assert.That(result.Count(), Is.EqualTo(1));
+                Assert.That(result.First().Name, Is.EqualTo(users.First().Name));
+            });
         }
 
         // Additional tests
@@ -45,9 +48,12 @@ namespace Tests.Services.Services
             // Act
             var result = await _userService.GetUserByIdAsync(1);
 
-            // Assert
-            Assert.That(result.Id, Is.EqualTo(user.Id));
-            Assert.That(result.Name, Is.EqualTo(user.Name));
+            Assert.Multiple(() =>
+            {
+                // Assert
+                Assert.That(result.Id, Is.EqualTo(user.Id));
+                Assert.That(result.Name, Is.EqualTo(user.Name));
+            });
         }
 
         [Test]
@@ -97,8 +103,6 @@ namespace Tests.Services.Services
             // Assert
             _unitOfWorkMock.Verify(repo => repo.Users.DeleteAsync(userId), Times.Once);
             _unitOfWorkMock.Verify(uow => uow.CompleteAsync(), Times.Once);
-
-
         }
     }
 }

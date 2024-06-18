@@ -27,20 +27,20 @@ namespace Tests.Services.Services
             // Arrange
             var transactions = new List<Transaction>
             {
-                new Transaction { Id = 1, UserId = 1, ProductId = 1, TransactionDate = DateTime.Now, Status = "Completed" },
-                new Transaction { Id = 2, UserId = 2, ProductId = 2, TransactionDate = DateTime.Now, Status = "Pending" }
+                new() { Id = 1, UserId = 1, ProductId = 1, TransactionDate = DateTime.Now, Status = "Completed" },
+                new() { Id = 2, UserId = 2, ProductId = 2, TransactionDate = DateTime.Now, Status = "Pending" }
             };
 
             var users = new List<User>
             {
-                new User { Id = 1, Name = "User1", Email = "user1@example.com" },
-                new User { Id = 2, Name = "User2", Email = "user2@example.com" }
+                new() { Id = 1, Name = "User1", Email = "user1@example.com" },
+                new() { Id = 2, Name = "User2", Email = "user2@example.com" }
             };
 
             var products = new List<Product>
             {
-                new Product { Id = 1, Name = "Product1" },
-                new Product { Id = 2, Name = "Product2" }
+                new() { Id = 1, Name = "Product1" },
+                new() { Id = 2, Name = "Product2" }
             };
 
             _unitOfWorkMock.Setup(uow => uow.Transactions.GetAllAsync()).ReturnsAsync(transactions);
@@ -50,10 +50,13 @@ namespace Tests.Services.Services
             // Act
             var result = await _transactionService.GetAllTransactionsAsync();
 
-            // Assert
-            Assert.AreEqual(2, result.Count());
-            Assert.AreEqual("User1", result.First().UserName);
-            Assert.AreEqual("Product1", result.First().ProductName);
+            Assert.Multiple(() =>
+            {
+                // Assert
+                Assert.That(result.Count(), Is.EqualTo(2));
+                Assert.That(result.First().UserName, Is.EqualTo("User1"));
+                Assert.That(result.First().ProductName, Is.EqualTo("Product1"));
+            });
         }
 
         [Test]
@@ -72,9 +75,12 @@ namespace Tests.Services.Services
             var result = await _transactionService.GetTransactionByIdAsync(1);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.AreEqual("User1", result.UserName);
-            Assert.AreEqual("Product1", result.ProductName);
+            Assert.That(result, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.UserName, Is.EqualTo("User1"));
+                Assert.That(result.ProductName, Is.EqualTo("Product1"));
+            });
         }
 
         [Test]

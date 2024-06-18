@@ -47,10 +47,13 @@ namespace Tests.Services.Services
             // Act
             var result = await _productService.GetProductByIdAsync(1);
 
-            // Assert
-            Assert.That(result.Id, Is.EqualTo(product.Id));
-            Assert.That(result.Name, Is.EqualTo(product.Name));
-            Assert.That(result.Price, Is.EqualTo(product.Price));
+            Assert.Multiple(() =>
+            {
+                // Assert
+                Assert.That(result.Id, Is.EqualTo(product.Id));
+                Assert.That(result.Name, Is.EqualTo(product.Name));
+                Assert.That(result.Price, Is.EqualTo(product.Price));
+            });
         }
 
         [Test]

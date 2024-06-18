@@ -24,8 +24,8 @@ namespace Tests.Services.Services
             // Arrange
             var categories = new List<Category>
             {
-                new Category { Id = 1, Name = "Category 1" },
-                new Category { Id = 2, Name = "Category 2" }
+                new() { Id = 1, Name = "Category 1" },
+                new() { Id = 2, Name = "Category 2" }
             };
             _unitOfWorkMock.Setup(u => u.Categories.GetAllAsync()).ReturnsAsync(categories);
 
@@ -34,11 +34,14 @@ namespace Tests.Services.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Count(), Is.EqualTo(2));
-            Assert.That(result.First().Id, Is.EqualTo(1));
-            Assert.That(result.First().Name, Is.EqualTo("Category 1"));
-            Assert.That(result.Last().Id, Is.EqualTo(2));
-            Assert.That(result.Last().Name, Is.EqualTo("Category 2"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Count(), Is.EqualTo(2));
+                Assert.That(result.First().Id, Is.EqualTo(1));
+                Assert.That(result.First().Name, Is.EqualTo("Category 1"));
+                Assert.That(result.Last().Id, Is.EqualTo(2));
+                Assert.That(result.Last().Name, Is.EqualTo("Category 2"));
+            });
         }
 
         [Test]
@@ -53,8 +56,11 @@ namespace Tests.Services.Services
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Id, Is.EqualTo(1));
-            Assert.That(result.Name, Is.EqualTo("Category 1"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Id, Is.EqualTo(1));
+                Assert.That(result.Name, Is.EqualTo("Category 1"));
+            });
         }
 
         [Test]
