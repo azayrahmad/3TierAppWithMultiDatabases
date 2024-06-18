@@ -1,6 +1,3 @@
-using Data.Models.ProductDb;
-using Data.Models.TransactionDb;
-using Data.Models.UserDb;
 using Services.Repositories.Interfaces;
 
 namespace Services.UnitOfWork
@@ -15,5 +12,6 @@ namespace Services.UnitOfWork
         ITransactionRepository Transactions { get; }
         ICategoryRepository Categories { get; }
         Task CompleteAsync();
+        void Dispose();
     }
 }

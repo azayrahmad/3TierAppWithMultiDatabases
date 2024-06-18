@@ -6,7 +6,7 @@ using Services.UnitOfWork;
 using Services.Services;
 using Data.Models.TransactionDb;
 
-namespace Tests
+namespace Tests.Services
 {
     public class ProductServiceTests
     {
@@ -17,7 +17,7 @@ namespace Tests
         public void Setup()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-        
+
             _unitOfWorkMock.Setup(u => u.Products).Returns(_unitOfWorkMock.Object.Products);
             _productService = new ProductService(_unitOfWorkMock.Object);
         }

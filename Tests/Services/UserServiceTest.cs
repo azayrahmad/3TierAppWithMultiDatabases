@@ -6,7 +6,7 @@ using Services.UnitOfWork;
 using Services;
 using Data.Models.TransactionDb;
 
-namespace Tests
+namespace Tests.Services
 {
     public class UserServiceTests
     {
