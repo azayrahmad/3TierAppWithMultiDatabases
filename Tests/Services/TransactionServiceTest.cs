@@ -6,7 +6,7 @@ using Data.Models.UserDb;
 using Data.Models.TransactionDb;
 using Services.Services;
 
-namespace Tests.Services
+namespace Tests.Services.Services
 {
     [TestFixture]
     public class TransactionServiceTests

@@ -9,7 +9,7 @@ namespace Data.Models.ProductDb
         [Required]
         [StringLength(100, MinimumLength = 2)]
         public string? Name { get; set; }
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
         [JsonIgnore]
         public Category? Category { get; set; }
 

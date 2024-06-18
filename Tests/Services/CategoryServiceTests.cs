@@ -4,7 +4,7 @@ using Services.DTOs;
 using Services.Services;
 using Services.UnitOfWork;
 
-namespace Tests.Services
+namespace Tests.Services.Services
 {
     public class CategoryServiceTests
     {
