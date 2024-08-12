@@ -13,7 +13,7 @@ using Services.UnitOfWork;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddDbContext<UserDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("UserDb")));
+builder.Services.AddDbContext<UserDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("UserDbSqlite")));
 builder.Services.AddDbContext<ProductDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("ProductDb"))); ;
 builder.Services.AddDbContext<TransactionDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("TransactionDb")));
 
